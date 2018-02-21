@@ -92,3 +92,7 @@ export WORKON_HOME=~/.virtualenvs
 source /usr/bin/virtualenvwrapper.sh
 
 [ -f /usr/share/fzf/key-bindings.zsh ] && source /usr/share/fzf/key-bindings.zsh
+
+# XDG
+export XDG_CONFIG_HOME="$HOME/.config"
+
