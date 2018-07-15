@@ -28,7 +28,7 @@ ZSH_THEME_GIT_PROMPT_MODIFIED="%{$fg[yellow]%}✱"
 ZSH_THEME_GIT_PROMPT_DELETED="%{$fg[red]%}✗"
 ZSH_THEME_GIT_PROMPT_RENAMED="%{$fg[blue]%}➦"
 ZSH_THEME_GIT_PROMPT_UNMERGED="%{$fg[magenta]%}✂"
-ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[grey]%}✈"
+ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[grey]%}⚠"
 
 # Shows the git status when inside a valid git repo
 function showgit() {
@@ -62,13 +62,10 @@ function setloccolour() {
     echo $text
 }
 
-# Prompt line1: /--{[$job] $username @ $hostname : $terminal}----{$directory}--
-# Prompt line2: | $time %|#
-# Right Side Prompt: $date (YYYY-MM-DD)
+# Prompt line1: ╔══[ $date $time ]═══[ $username @ $hostname : $terminal] $directory
+# Prompt line2: ╚═[ $exit_code ] $|#
 # Note: spaces are there for clarity they aren't in the actual code
 PROMPT=$'
-%{$fg[red]%}/--{%{$reset_color%}[%!]%(!.%UROOT%u.%n)@%{$(setloccolour)%}%m%{$reset_color%}:%l%{$fg[red]%}}----{%{$reset_color%}%~%{$fg[red]%}}--
-| %{$reset_color%}%T$(showgit)%{$fg[red]%} %#%{$reset_color%} '
+%{$fg[red]%}╔══[%{$reset_color%}%D{%Y-%m-%d} %T%{$fg[red]%}]═══[%{$reset_color%}%(!.%UROOT%u.%n)@%{$(setloccolour)%}%m%{$reset_color%}:%l%{$fg[red]%}]%{$reset_color%} %~%{$fg[red]%}
+╚═[%{$reset_color%}%?%{$fg[red]%}]%{$reset_color%}$(showgit)%{$reset_color%} %(!.#.$) '
 PS2=$'%{$fg[red]%}| %{$fg[blue]%B%}>%{%b$reset_color%} '
-RPS1='%D{%Y-%m-%d}'
-
