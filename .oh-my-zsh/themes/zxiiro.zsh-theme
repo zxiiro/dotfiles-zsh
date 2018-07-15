@@ -23,6 +23,8 @@
 #
 ####################################################################################
 
+FG_COLOUR="yellow"
+
 function showloc() {
     hostname=$(who am i | cut -f2 -d\( | cut -f1 -d\))
     echo $hostname
@@ -51,7 +53,7 @@ function setloccolour() {
 # Prompt line2: ╚═[ $exit_code ] $|#
 # Note: spaces are there for clarity they aren't in the actual code
 PROMPT=$'
-%{$fg[red]%}╔══[%{$reset_color%}%D{%Y-%m-%d} %T%{$fg[red]%}]═══[%{$reset_color%}%(!.%UROOT%u.%n)@%{$(setloccolour)%}%m%{$reset_color%}:%l%{$fg[red]%}]%{$reset_color%} %~%{$fg[red]%}
-╚═[%{$reset_color%}$(battery_pct_prompt)%{$fg[red]%}]═[%{$reset_color%}%?%{$fg[red]%}]%{$reset_color%}$(git_super_status)%{$reset_color%} %(!.#.$) '
-PS2=$'%{$fg[red]%}| %{$fg[blue]%B%}>%{%b$reset_color%} '
+%{$fg[$FG_COLOUR]%}╔══[%{$reset_color%}%D{%Y-%m-%d} %T%{$fg[$FG_COLOUR]%}]═══[%{$reset_color%}%(!.%UROOT%u.%n)@%{$(setloccolour)%}%m%{$reset_color%}:%l%{$fg[$FG_COLOUR]%}]%{$reset_color%} %~%{$fg[$FG_COLOUR]%}
+╚═[%{$reset_color%}$(battery_pct_prompt)%{$fg[$FG_COLOUR]%}]═[%{$reset_color%}%?%{$fg[$FG_COLOUR]%}]%{$reset_color%}$(git_super_status)%{$reset_color%} %(!.#.$) '
+PS2=$'%{$fg[$FG_COLOUR]%}| %{$fg[blue]%B%}>%{%b$reset_color%} '
 RPROMPT=""
