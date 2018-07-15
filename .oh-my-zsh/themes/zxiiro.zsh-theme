@@ -52,6 +52,6 @@ function setloccolour() {
 # Note: spaces are there for clarity they aren't in the actual code
 PROMPT=$'
 %{$fg[red]%}╔══[%{$reset_color%}%D{%Y-%m-%d} %T%{$fg[red]%}]═══[%{$reset_color%}%(!.%UROOT%u.%n)@%{$(setloccolour)%}%m%{$reset_color%}:%l%{$fg[red]%}]%{$reset_color%} %~%{$fg[red]%}
-╚═[%{$reset_color%}%?%{$fg[red]%}]%{$reset_color%}$(git_super_status)%{$reset_color%} %(!.#.$) '
+╚═[%{$reset_color%}$(battery_pct_prompt)%{$fg[red]%}]═[%{$reset_color%}%?%{$fg[red]%}]%{$reset_color%}$(git_super_status)%{$reset_color%} %(!.#.$) '
 PS2=$'%{$fg[red]%}| %{$fg[blue]%B%}>%{%b$reset_color%} '
 RPROMPT=""
