@@ -23,21 +23,6 @@
 #
 ####################################################################################
 
-ZSH_THEME_GIT_PROMPT_ADDED="%{$fg[cyan]%}+"
-ZSH_THEME_GIT_PROMPT_MODIFIED="%{$fg[yellow]%}✱"
-ZSH_THEME_GIT_PROMPT_DELETED="%{$fg[red]%}✗"
-ZSH_THEME_GIT_PROMPT_RENAMED="%{$fg[blue]%}➦"
-ZSH_THEME_GIT_PROMPT_UNMERGED="%{$fg[magenta]%}✂"
-ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[grey]%}⚠"
-
-# Shows the git status when inside a valid git repo
-function showgit() {
-    ref=$(git symbolic-ref HEAD 2> /dev/null) || return
-    gitinfo="$ZSH_THEME_GIT_PROMPT_PREFIX${ref#refs/heads/}$( git_prompt_status )%{$fg[white]%B%}$ZSH_THEME_GIT_PROMPT_SUFFIX"
-    text=" %{%B%}<$gitinfo>%{%b%}"
-    echo $text
-}
-
 function showloc() {
     hostname=$(who am i | cut -f2 -d\( | cut -f1 -d\))
     echo $hostname
@@ -67,5 +52,6 @@ function setloccolour() {
 # Note: spaces are there for clarity they aren't in the actual code
 PROMPT=$'
 %{$fg[red]%}╔══[%{$reset_color%}%D{%Y-%m-%d} %T%{$fg[red]%}]═══[%{$reset_color%}%(!.%UROOT%u.%n)@%{$(setloccolour)%}%m%{$reset_color%}:%l%{$fg[red]%}]%{$reset_color%} %~%{$fg[red]%}
-╚═[%{$reset_color%}%?%{$fg[red]%}]%{$reset_color%}$(showgit)%{$reset_color%} %(!.#.$) '
+╚═[%{$reset_color%}%?%{$fg[red]%}]%{$reset_color%}$(git_super_status)%{$reset_color%} %(!.#.$) '
 PS2=$'%{$fg[red]%}| %{$fg[blue]%B%}>%{%b$reset_color%} '
+RPROMPT=""
