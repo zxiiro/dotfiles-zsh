@@ -25,6 +25,28 @@
 
 FG_COLOUR="yellow"
 
+function precmd {
+    local TERMWIDTH
+    (( TERMWIDTH = ${COLUMNS} - 1 ))
+
+    PR_FILLBAR=""
+    PR_PWDLEN=""
+
+    local promptsize=${#${(%):---[]---[]---[]---}}
+    local pwdsize=${#${(%):-%~}}
+    local hostsize=${#${-%(!.%UROOT%u.%n)@%m:}}
+    local termsize=${#${(%):-%l}}
+    local timesize=${#${-%Y-%m-%d %T}}
+
+
+    if [[ "$promptsize + $pwdsize + $hostsize + $termsize + $timesize" -gt $TERMWIDTH ]]; then
+        ((PR_PWDLEN=$TERMWIDTH - $promptsize))
+    else
+        PR_FILLBAR="\${(l.(($TERMWIDTH - ($promptsize + $pwdsize + $hostsize + $termsize + $timesize)))..═.)}"
+    fi
+}
+
+
 function showloc() {
     hostname=$(who am i | cut -f2 -d\( | cut -f1 -d\))
     echo $hostname
@@ -49,11 +71,15 @@ function setloccolour() {
     echo $text
 }
 
-# Prompt line1: ╔══[ $date $time ]═══[ $username @ $hostname : $terminal] $directory
-# Prompt line2: ╚═[ $exit_code ] $|#
+setprompt() {
+# Prompt line1: ╔══[ $date $time ]═══[ $username @ $hostname : $directory]═══[ $terminal ]
+# Prompt line2: ╚══[ $battery ]═[ $exit_code ] $|#
 # Note: spaces are there for clarity they aren't in the actual code
 PROMPT=$'
-%{$fg[$FG_COLOUR]%}╔══[%{$reset_color%}%D{%Y-%m-%d} %T%{$fg[$FG_COLOUR]%}]═══[%{$reset_color%}%l%{$fg[$FG_COLOUR]%}]═══[%{$reset_color%}%(!.%UROOT%u.%n)@%{$(setloccolour)%}%m%{$reset_color%}:%~%{$fg[$FG_COLOUR]%}]
-╚═[%{$reset_color%}$(battery_pct_prompt)%{$fg[$FG_COLOUR]%}]═[%{$reset_color%}%?%{$fg[$FG_COLOUR]%}]%{$reset_color%}$(git_super_status)%{$reset_color%} %(!.#.$) '
+%{$fg[$FG_COLOUR]%}╔══[%{$reset_color%}%D{%Y-%m-%d} %T%{$fg[$FG_COLOUR]%}]═══[%{$reset_color%}%(!.%UROOT%u.%n)@%{$(setloccolour)%}%m%{$reset_color%}:%~%{$fg[$FG_COLOUR]%}]${(e)PR_FILLBAR}═══[%{$reset_color%}%l%{$fg[$FG_COLOUR]%}]═══
+╚══[%{$reset_color%}$(battery_pct_prompt)%{$fg[$FG_COLOUR]%}]═[%{$reset_color%}%?%{$fg[$FG_COLOUR]%}]%{$reset_color%}$(git_super_status)%{$reset_color%} %(!.#.$) '
 PS2=$'%{$fg[$FG_COLOUR]%}| %{$fg[blue]%B%}>%{%b$reset_color%} '
 RPROMPT=""
+}
+
+setprompt
