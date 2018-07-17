@@ -36,7 +36,7 @@ function precmd {
     local pwdsize=${#${(%):-%~}}
     local hostsize=${#${(%):-%(!.%UROOT%u.%n)@%m:}}
     local termsize=${#${(%):-%l}}
-    local timesize=${#${-%Y-%m-%d %T}}
+    local timesize=16  # %Y-%m-%d %T
 
     if [[ "$promptsize + $pwdsize + $hostsize + $termsize + $timesize" -gt $TERMWIDTH ]]; then
         ((PR_PWDLEN=$TERMWIDTH - $promptsize))
