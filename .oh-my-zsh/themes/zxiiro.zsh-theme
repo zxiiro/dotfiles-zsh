@@ -42,7 +42,7 @@ function precmd {
     if [[ "$promptsize + $pwdsize + $hostsize + $termsize + $timesize" -gt $TERMWIDTH ]]; then
         ((PR_PWDLEN=$TERMWIDTH - $promptsize))
     else
-        PR_FILLBAR="\${(l.(($TERMWIDTH - ($promptsize + $pwdsize + $hostsize + $termsize + $timesize)))..═.)}"
+        PR_FILLBAR="\${(l.(($TERMWIDTH - ($promptsize + $pwdsize + $hostsize + $termsize + $timesize)))..━.)}"
     fi
 }
 
@@ -74,7 +74,7 @@ function setloccolour() {
 # Prompt line2: ╚══[ $battery ]═[ $exit_code ] $|#
 # Note: spaces are there for clarity they aren't in the actual code
 PROMPT=$'
-%F{$FG_COLOUR}╔══[%f%D{%Y-%m-%d} %T%F{$FG_COLOUR}]═══[%f%(!.%UROOT%u.%n)@%{$(setloccolour)%}%m%f:%~%F{$FG_COLOUR}]═══${(e)PR_FILLBAR}═══[%f%l%F{$FG_COLOUR}]═══
-╚══[%f$(battery_pct_prompt)%F{$FG_COLOUR}]═[%f%?%F{$FG_COLOUR}]%f$(git_super_status)%f %(!.#.$) '
+%F{$FG_COLOUR}┏━━[%f%D{%Y-%m-%d} %T%F{$FG_COLOUR}]━━━[%f%(!.%UROOT%u.%n)@%{$(setloccolour)%}%m%f:%~%F{$FG_COLOUR}]━━━${(e)PR_FILLBAR}━━━[%f%l%F{$FG_COLOUR}]━━━
+┗━━[%f$(battery_pct_prompt)%F{$FG_COLOUR}]━[%f%?%F{$FG_COLOUR}]%f$(git_super_status)%f %(!.#.$) '
 PS2=$'%F{$FG_COLOUR}| %F{blue}%B>%b%f '
 RPROMPT=""
