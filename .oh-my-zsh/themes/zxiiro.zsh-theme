@@ -26,8 +26,9 @@
 FG_COLOUR="yellow"
 
 function precmd {
-    local TERMWIDTH
-    (( TERMWIDTH = ${COLUMNS} - 1 ))
+    local TERMWIDTH=${COLUMNS}
+    # ZSH's right hand prompt leaves one space on the right
+    #(( TERMWIDTH = ${COLUMNS} - 1 ))
 
     PR_FILLBAR=""
     PR_PWDLEN=""
