@@ -24,6 +24,11 @@
 ####################################################################################
 
 FG_COLOUR="yellow"
+PROMPT_PREFIX="[%f"
+PROMPT_SUFFIX="%F{$FG_COLOUR}]"
+ZSH_THEME_GIT_PROMPT_BRANCH="%{$fg_bold[white]%}"
+ZSH_THEME_GIT_PROMPT_PREFIX="[%f"
+ZSH_THEME_GIT_PROMPT_SUFFIX="%F{$FG_COLOUR}]━"
 
 function precmd {
     local TERMWIDTH=${COLUMNS}
@@ -33,7 +38,7 @@ function precmd {
     PR_FILLBAR=""
     PR_PWDLEN=""
 
-    local promptsize=${#${(%):----[]---[]------[]---}}
+    local promptsize=${#${(%):----[]---[]---[]---}}
     local pwdsize=${#${(%):-%~}}
     local hostsize=${#${(%):-%(!.%UROOT%u.%n)@%m:}}
     local termsize=${#${(%):-%l}}
@@ -70,11 +75,27 @@ function setloccolour() {
     echo $text
 }
 
-# Prompt line1: ╔══[ $date $time ]═══[ $username @ $hostname : $directory]══════[ $terminal ]═══
-# Prompt line2: ╚══[ $battery ]═[ $exit_code ] $|#
-# Note: spaces are there for clarity they aren't in the actual code
-PROMPT=$'
-%F{$FG_COLOUR}┏━━[%f%D{%Y-%m-%d} %T%F{$FG_COLOUR}]━━━[%f%(!.%UROOT%u.%n)@%{$(setloccolour)%}%m%f:%~%F{$FG_COLOUR}]━━━${(e)PR_FILLBAR}━━━[%f%l%F{$FG_COLOUR}]━━━
-┗━━[%f$(battery_pct_prompt)%F{$FG_COLOUR}]━[%f%?%F{$FG_COLOUR}]%f$(git_super_status)%f %(!.#.$) '
+function setup_prompt() {
+    local prompt
+
+    echo ""
+
+    prompt+="%F{$FG_COLOUR}┏━━"
+    prompt+="${PROMPT_PREFIX}%D{%Y-%m-%d} %T${PROMPT_SUFFIX}━━━"
+    prompt+="${PROMPT_PREFIX}%(!.%UROOT%u.%n)@%{$(setloccolour)%}%m%f:%~${PROMPT_SUFFIX}━━━"
+    prompt+="${(e)PR_FILLBAR}"
+    prompt+="${PROMPT_PREFIX}%l${PROMPT_SUFFIX}━━━"
+    echo "$prompt"
+
+    local prompt2
+    prompt2+="%F{$FG_COLOUR}┗━━"
+    prompt2+="${PROMPT_PREFIX}$(battery_pct_prompt)${PROMPT_SUFFIX}━"
+    prompt2+="${PROMPT_PREFIX}%f%?%F{$FG_COLOUR}${PROMPT_SUFFIX}━"
+    prompt2+="$(git_super_status)"
+    prompt2+="%f%(!.#.$) "
+    echo "$prompt2"
+}
+
+PROMPT=$'$(setup_prompt)'
 PS2=$'%F{$FG_COLOUR}| %F{blue}%B>%b%f '
 RPROMPT=""
