@@ -2,7 +2,7 @@
 export ZSH=$HOME/.oh-my-zsh
 ZSH_THEME="zxiiro"
 HIST_STAMPS="yyyy-mm-dd"
-plugins=(battery git-prompt pip virtualenv)
+plugins=(battery git-prompt pip thefuck virtualenv)
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
