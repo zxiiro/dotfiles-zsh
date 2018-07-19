@@ -40,20 +40,24 @@ function precmd {
     PR_FILLBAR=""
     PR_PWDLEN=""
 
-    local promptsize=${#${(%):----[]---[]---[]---[]---[]---}}
+    local promptsize=${#${(%):----[]---[]---[]---[]---}}
+
     local batsize="$(battery_pct_remaining)"
-    ((batsize = ${#batsize} + 3))
+    if [ ! -z "$batsize" ]; then
+        ((promptsize += 5 + ${#batsize} + 3))
+    fi
+
     local pwdsize=${#${(%):-%~}}
     local hostsize=${#${(%):-%(!.%UROOT%u.%n)@%m:}}
     local ramsize="$(raminfo)"
-    ((ramsize = ${#ramsize} + 2))
+    ((ramsize = ${#ramsize} + 3))
     local termsize=${#${(%):-%l}}
     local timesize=16  # %Y-%m-%d %T
 
-    if [[ "$promptsize + $batsize + $pwdsize + $hostsize + $ramsize + $termsize + $timesize" -gt $TERMWIDTH ]]; then
+    if [[ "$promptsize + $pwdsize + $hostsize + $ramsize + $termsize + $timesize" -gt $TERMWIDTH ]]; then
         ((PR_PWDLEN=$TERMWIDTH - $promptsize))
     else
-        PR_FILLBAR="\${(l.(($TERMWIDTH - ($promptsize + $batsize + $pwdsize + $hostsize + $ramsize + $termsize + $timesize)))..━.)}"
+        PR_FILLBAR="\${(l.(($TERMWIDTH - ($promptsize + $pwdsize + $hostsize + $ramsize + $termsize + $timesize)))..━.)}"
     fi
 }
 
@@ -95,7 +99,12 @@ function setup_prompt() {
     prompt+="${PROMPT_PREFIX}%(!.%UROOT%u.%n)@%{$(setloccolour)%}%m%f:%~${PROMPT_SUFFIX}━━━"
     prompt+="${(e)PR_FILLBAR}"
     prompt+="${PROMPT_PREFIX}🐏$(raminfo)%%${PROMPT_SUFFIX}━━━"
-    prompt+="${PROMPT_PREFIX}🔋$(battery_pct_remaining)%%${PROMPT_SUFFIX}━━━"
+
+    local batinfo="$(battery_pct_remaining)"
+    if [ ! -z "$batinfo" ]; then
+        prompt+="${PROMPT_PREFIX}🔋$(battery_pct_remaining)%%${PROMPT_SUFFIX}━━━"
+    fi
+
     prompt+="${PROMPT_PREFIX}%l${PROMPT_SUFFIX}━━━"
     echo "$prompt"
 
