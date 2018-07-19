@@ -40,17 +40,23 @@ function precmd {
     PR_FILLBAR=""
     PR_PWDLEN=""
 
-    local promptsize=${#${(%):----[]---[]---[]---}}
+    local promptsize=${#${(%):----[]---[]---[]---[]---}}
     local pwdsize=${#${(%):-%~}}
     local hostsize=${#${(%):-%(!.%UROOT%u.%n)@%m:}}
+    local ramsize="$(raminfo)"
+    ((ramsize = ${#ramsize} + 2))
     local termsize=${#${(%):-%l}}
     local timesize=16  # %Y-%m-%d %T
 
-    if [[ "$promptsize + $pwdsize + $hostsize + $termsize + $timesize" -gt $TERMWIDTH ]]; then
+    if [[ "$promptsize + $pwdsize + $hostsize + $ramsize + $termsize + $timesize" -gt $TERMWIDTH ]]; then
         ((PR_PWDLEN=$TERMWIDTH - $promptsize))
     else
-        PR_FILLBAR="\${(l.(($TERMWIDTH - ($promptsize + $pwdsize + $hostsize + $termsize + $timesize)))..━.)}"
+        PR_FILLBAR="\${(l.(($TERMWIDTH - ($promptsize + $pwdsize + $hostsize + $ramsize + $termsize + $timesize)))..━.)}"
     fi
+}
+
+function raminfo() {
+    echo "$(free | grep Mem | awk '{print $3/$2 * 100}' | awk -F'.' '{print $1}')"
 }
 
 function showloc() {
@@ -86,6 +92,7 @@ function setup_prompt() {
     prompt+="${PROMPT_PREFIX}%D{%Y-%m-%d} %T${PROMPT_SUFFIX}━━━"
     prompt+="${PROMPT_PREFIX}%(!.%UROOT%u.%n)@%{$(setloccolour)%}%m%f:%~${PROMPT_SUFFIX}━━━"
     prompt+="${(e)PR_FILLBAR}"
+    prompt+="${PROMPT_PREFIX}🐏$(raminfo)%%${PROMPT_SUFFIX}━━━"
     prompt+="${PROMPT_PREFIX}%l${PROMPT_SUFFIX}━━━"
     echo "$prompt"
 
