@@ -29,6 +29,8 @@ PROMPT_SUFFIX="%F{$FG_COLOUR}]"
 ZSH_THEME_GIT_PROMPT_BRANCH="%{$fg_bold[white]%}"
 ZSH_THEME_GIT_PROMPT_PREFIX="[%f"
 ZSH_THEME_GIT_PROMPT_SUFFIX="%F{$FG_COLOUR}]━"
+ZSH_THEME_VIRTUALENV_PREFIX="${PROMPT_PREFIX}🐍"
+ZSH_THEME_VIRTUALENV_SUFFIX="${PROMPT_SUFFIX}━"
 
 function precmd {
     local TERMWIDTH=${COLUMNS}
@@ -89,6 +91,7 @@ function setup_prompt() {
 
     local prompt2
     prompt2+="%F{$FG_COLOUR}┗━━"
+    prompt2+="$(virtualenv_prompt_info)"
     prompt2+="${PROMPT_PREFIX}$(battery_pct_prompt)${PROMPT_SUFFIX}━"
     prompt2+="${PROMPT_PREFIX}%f%?%F{$FG_COLOUR}${PROMPT_SUFFIX}━"
     prompt2+="$(git_super_status)"
