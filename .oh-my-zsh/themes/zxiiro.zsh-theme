@@ -40,7 +40,7 @@ function precmd {
     PR_FILLBAR=""
     PR_PWDLEN=""
 
-    local promptsize=${#${(%):----[]---[]---[]---[]---}}
+    local promptsize=${#${(%):--[]---[]---[]---[]---}}
 
     local batsize="$(battery_pct_remaining)"
     if [ ! -z "$batsize" ]; then
@@ -94,7 +94,7 @@ function setup_prompt() {
 
     echo ""
 
-    prompt+="%F{$FG_COLOUR}┏━━"
+    prompt+="%F{$FG_COLOUR}┏"
     prompt+="${PROMPT_PREFIX}%D{%Y-%m-%d} %T${PROMPT_SUFFIX}━━━"
     prompt+="${PROMPT_PREFIX}%(!.%UROOT%u.%n)@%{$(setloccolour)%}%m%f:%~${PROMPT_SUFFIX}━━━"
     prompt+="${(e)PR_FILLBAR}"
@@ -109,7 +109,7 @@ function setup_prompt() {
     echo "$prompt"
 
     local prompt2
-    prompt2+="%F{$FG_COLOUR}┗━━"
+    prompt2+="%F{$FG_COLOUR}┗"
     prompt2+="$(virtualenv_prompt_info)"
     prompt2+="$(git_super_status)"
     prompt2+="${PROMPT_PREFIX}%f%?%F{$FG_COLOUR}${PROMPT_SUFFIX}━"
