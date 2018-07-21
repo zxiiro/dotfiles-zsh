@@ -52,7 +52,7 @@ function precmd {
     local ramsize="$(raminfo)"
     ((ramsize = ${#ramsize} + 3))
     local termsize=${#${(%):-%l}}
-    local timesize=16  # %Y-%m-%d %T
+    local timesize=${#${(%%):-%D{%Y-%m-%d} %T}}  # %Y-%m-%d %T
 
     if [[ "$promptsize + $pwdsize + $hostsize + $ramsize + $termsize + $timesize" -gt $TERMWIDTH ]]; then
         ((PR_PWDLEN=$TERMWIDTH - $promptsize))
