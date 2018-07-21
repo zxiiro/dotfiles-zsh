@@ -33,9 +33,7 @@ ZSH_THEME_VIRTUALENV_PREFIX="${PROMPT_PREFIX}🐍"
 ZSH_THEME_VIRTUALENV_SUFFIX="${PROMPT_SUFFIX}━"
 
 function precmd {
-    local TERMWIDTH=${COLUMNS}
-    # ZSH's right hand prompt leaves one space on the right
-    #(( TERMWIDTH = ${COLUMNS} - 1 ))
+    local TERMWIDTH="${COLUMNS}"
 
     PR_FILLBAR=""
     PR_PWDLEN=""
@@ -55,19 +53,20 @@ function precmd {
     local timesize=${#${(%%):-%D{%Y-%m-%d} %T}}  # %Y-%m-%d %T
 
     if [[ "$promptsize + $pwdsize + $hostsize + $ramsize + $termsize + $timesize" -gt $TERMWIDTH ]]; then
-        ((PR_PWDLEN=$TERMWIDTH - $promptsize))
+        ((PR_PWDLEN = TERMWIDTH - promptsize))
     else
         PR_FILLBAR="\${(l.(($TERMWIDTH - ($promptsize + $pwdsize + $hostsize + $ramsize + $termsize + $timesize)))..━.)}"
     fi
 }
 
 function raminfo() {
-    echo "$(free | grep Mem | awk '{print $3/$2 * 100}' | awk -F'.' '{print $1}')"
+    raminfo="$(free | grep Mem | awk '{print $3/$2 * 100}' | awk -F'.' '{print $1}')"
+    echo "$raminfo"
 }
 
 function showloc() {
     hostname=$(who am i | cut -f2 -d\( | cut -f1 -d\))
-    echo $hostname
+    echo "$hostname"
 }
 
 # Set a random colour if logged in via ssh
@@ -76,17 +75,17 @@ function setloccolour() {
 
     if [ -n "$SSH_CLIENT" ]
     then
-        hostname=`hostname`
+        hostname=$(hostname)
         if [ ! -f "$HOME/.zxiiro-theme/sshcolor-$hostname" ]
         then
-            mkdir $HOME/.zxiiro-theme
-            echo `shuf -i 133-163 -n 1` > "$HOME/.zxiiro-theme/sshcolor-$hostname"
+            mkdir "$HOME/.zxiiro-theme"
+            shuf -i 133-163 -n 1 > "$HOME/.zxiiro-theme/sshcolor-$hostname"
         fi
 
-        SSHCOLOR=`cat "$HOME/.zxiiro-theme/sshcolor-$hostname"`
+        SSHCOLOR=$(cat "$HOME/.zxiiro-theme/sshcolor-$hostname")
         text="%{$FG[$SSHCOLOR]%}"
     fi
-    echo $text
+    echo "$text"
 }
 
 function setup_prompt() {
