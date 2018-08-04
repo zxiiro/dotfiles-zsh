@@ -22,6 +22,39 @@ function mvn() {
 }
 MAVEN_OPTS="-Xmx8g -XX:+TieredCompilation -XX:TieredStopAtLevel=1"
 
+# Install ZSH on remote ssh system
+function zshri() {
+    if [ -z "$1" ]; then
+        echo "Usage: zshri SSH_HOST"
+        exit 1
+    fi
+    # We want to wordsplit here on purpose
+    # shellcheck disable=2068
+    ssh -t -t $@ /bin/bash << EOF
+set -x
+workdir=\$(mktemp -d --tmpdir="\$HOME" zshsrc-XXXX)
+
+# Compile ZSH
+git clone git://github.com/zsh-users/zsh.git "\$workdir"
+cd "\$workdir" || exit 1
+autoheader
+autoconf
+date > stamp-h.in
+./configure --prefix="\$HOME/.local" --enable-shared
+make -j2
+make install
+
+echo '[ -f \$HOME/.local/bin/zsh ] && exec \$HOME/.local/bin/zsh -l' > \$HOME/.bashrc
+
+git clone git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
+wget -O ~/.zshrc https://raw.githubusercontent.com/zxiiro/dotfiles-zsh/master/.zshrc
+wget -O ~/.oh-my-zsh/themes/zxiiro.zsh-theme https://raw.githubusercontent.com/zxiiro/dotfiles-zsh/master/.oh-my-zsh/themes/zxiiro.zsh-theme
+
+rm -rf "\$workdir"
+exit
+EOF
+}
+
 # Python virtualenv
 export WORKON_HOME=~/.virtualenvs
 source /usr/bin/virtualenvwrapper.sh
@@ -33,4 +66,3 @@ export XDG_CONFIG_HOME="$HOME/.config"
 
 # pass
 export PASSWORD_STORE_SIGNING_KEY="DE0E66E32F1FDD0902666B96E63EDCA9329DD07E FA4DB93EB9034BBFB8532A263360FFB703A9DA1F 34F95A028B74AEC9425FB7EA8BC411072810846A"
-
