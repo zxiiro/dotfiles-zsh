@@ -32,29 +32,38 @@ function zshri() {
     fi
     # We want to wordsplit here on purpose
     # shellcheck disable=2068
-    ssh -t -t $@ /bin/bash << EOF
+    ssh -t -t $@ /bin/bash << SSHEOF
+cat << EOF > \$HOME/zshri.sh
+#!/bin/bash
 set -x
-workdir=\$(mktemp -d --tmpdir="\$HOME" zshsrc-XXXX)
+if ! hash zsh; then
+    workdir=\$(mktemp -d --tmpdir="\$HOME" zshsrc-XXXX)
 
-# Compile ZSH
-git clone git://github.com/zsh-users/zsh.git "\$workdir"
-cd "\$workdir" || exit 1
-autoheader
-autoconf
-date > stamp-h.in
-./configure --prefix="\$HOME/.local" --enable-shared
-make -j2
-make install
+    # Compile ZSH
+    git clone git://github.com/zsh-users/zsh.git "\$workdir"
+    cd "\$workdir" || exit 1
+    autoheader
+    autoconf
+    date > stamp-h.in
+    ./configure --prefix="\$HOME/.local" --enable-shared
+    make -j2
+    make install
 
-echo '[ -f \$HOME/.local/bin/zsh ] && exec \$HOME/.local/bin/zsh -l' > \$HOME/.bashrc
+    rm -rf "\$workdir"
+
+    echo '[ -f \$HOME/.local/bin/zsh ] && exec \$HOME/.local/bin/zsh -l' > \$HOME/.bashrc
+fi
 
 git clone git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
-wget -O ~/.zshrc https://raw.githubusercontent.com/zxiiro/dotfiles-zsh/master/.zshrc
-wget -O ~/.oh-my-zsh/themes/zxiiro.zsh-theme https://raw.githubusercontent.com/zxiiro/dotfiles-zsh/master/.oh-my-zsh/themes/zxiiro.zsh-theme
-
-rm -rf "\$workdir"
-exit
+wget -nv -O ~/.zshrc https://raw.githubusercontent.com/zxiiro/dotfiles-zsh/master/.zshrc
+wget -nv -O ~/.oh-my-zsh/themes/zxiiro.zsh-theme https://raw.githubusercontent.com/zxiiro/dotfiles-zsh/master/.oh-my-zsh/themes/zxiiro.zsh-theme
 EOF
+
+chmod +x \$HOME/zshri.sh
+\$HOME/zshri.sh
+rm \$HOME/zshri.sh
+exit
+SSHEOF
 }
 
 if [ -f "${HOME}/.gnupg/gpg-agent-wrapper" ]; then
