@@ -1,17 +1,18 @@
+#shellcheck disable=SC2148
 # Path to your oh-my-zsh installation.
-export ZSH=$HOME/.oh-my-zsh
+export ZSH="${HOME}/.oh-my-zsh"
 ZSH_THEME="zxiiro"
 HIST_STAMPS="yyyy-mm-dd"
 plugins=(battery git-prompt pip thefuck virtualenv)
-source $ZSH/oh-my-zsh.sh
+echo "zsh theme: $ZSH_THEME"
+echo "zsh plugins: ${plugins[*]}"
+echo "zsh history datestamp: $HIST_STAMPS"
+# shellcheck disable=SC1090
+source "$ZSH/oh-my-zsh.sh"
 
 # User configuration
 export PATH="$HOME/bin:$HOME/.local/bin:/usr/local/bin:/usr/bin:/bin:/opt/bin:/usr/x86_64-pc-linux-gnu/gcc-bin/4.7.3:/usr/games/bin:$PATH"
 export LANG=en_CA.UTF-8
-
-# ssh authentication component
-source ${HOME}/.gnupg/gpg-agent-wrapper
-export SSH_AUTH_SOCK=/run/user/1000/gnupg/S.gpg-agent.ssh
 
 # Maven
 function mvn() {
@@ -21,6 +22,7 @@ function mvn() {
     spd-say 'Done'
 }
 MAVEN_OPTS="-Xmx8g -XX:+TieredCompilation -XX:TieredStopAtLevel=1"
+echo "MAVEN_OPTS: $MAVEN_OPTS"
 
 # Install ZSH on remote ssh system
 function zshri() {
@@ -55,11 +57,22 @@ exit
 EOF
 }
 
-# Python virtualenv
-export WORKON_HOME=~/.virtualenvs
-source /usr/bin/virtualenvwrapper.sh
+if [ -f "${HOME}/.gnupg/gpg-agent-wrapper" ]; then
+    # shellcheck disable=SC1090,SC1091
+    source "${HOME}/.gnupg/gpg-agent-wrapper"
+    export SSH_AUTH_SOCK=/run/user/1000/gnupg/S.gpg-agent.ssh
+fi
 
-[ -f /usr/share/fzf/key-bindings.zsh ] && source /usr/share/fzf/key-bindings.zsh
+if [ -f /usr/bin/virtualenvwrapper.sh ]; then
+    export WORKON_HOME=~/.virtualenvs
+    # shellcheck disable=SC1091
+    source /usr/bin/virtualenvwrapper.sh
+fi
+
+if [ -f /usr/share/fzf/key-bindings.zsh ]; then
+    # shellcheck disable=SC1091
+    source /usr/share/fzf/key-bindings.zsh
+fi
 
 # XDG
 export XDG_CONFIG_HOME="$HOME/.config"
