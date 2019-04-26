@@ -60,7 +60,11 @@ function precmd {
 }
 
 function raminfo() {
-    raminfo="$(free | grep Mem | awk '{print $3/$2 * 100}' | awk -F'.' '{print $1}')"
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        raminfo="0"
+    else
+        raminfo="$(free | grep Mem | awk '{print $3/$2 * 100}' | awk -F'.' '{print $1}')"
+    fi
     echo "$raminfo"
 }
 
