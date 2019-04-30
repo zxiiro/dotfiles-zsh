@@ -16,7 +16,7 @@ export LANG=en_CA.UTF-8
 
 # Maven
 function mvn() {
-    /usr/bin/mvn \
+    command mvn \
         --batch-mode \
         "$@"
     spd-say 'Done'
