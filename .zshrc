@@ -19,7 +19,11 @@ function mvn() {
     command mvn \
         --batch-mode \
         "$@"
-    spd-say 'Done'
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        say 'Done'
+    else
+        spd-say 'Done'
+    fi
 }
 MAVEN_OPTS="-Xmx8g -XX:+TieredCompilation -XX:TieredStopAtLevel=1"
 echo "MAVEN_OPTS: $MAVEN_OPTS"
