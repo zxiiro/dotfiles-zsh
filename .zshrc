@@ -70,13 +70,14 @@ exit
 SSHEOF
 }
 
-if [[ "$OSTYPE" == "darwin"* ]]; then
-    export "SSH_AUTH_SOCK=${HOME}/.gnupg/S.gpg-agent.ssh"
-else
-    if [ -f "${HOME}/.gnupg/gpg-agent-wrapper" ]; then
-        # shellcheck disable=SC1090,SC1091
-        source "${HOME}/.gnupg/gpg-agent-wrapper"
-        export SSH_AUTH_SOCK=/run/user/1000/gnupg/S.gpg-agent.ssh
+if [ -f "${HOME}/.gnupg/gpg-agent-wrapper" ]; then
+    # shellcheck disable=SC1090,SC1091
+    source "${HOME}/.gnupg/gpg-agent-wrapper"
+
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        export SSH_AUTH_SOCK="${HOME}/.gnupg/S.gpg-agent.ssh"
+    else
+        export SSH_AUTH_SOCK="/run/user/1000/gnupg/S.gpg-agent.ssh"
     fi
 fi
 
