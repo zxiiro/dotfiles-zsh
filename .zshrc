@@ -14,6 +14,16 @@ source "$ZSH/oh-my-zsh.sh"
 export PATH="$HOME/bin:$HOME/.local/bin:/usr/local/bin:/usr/bin:/bin:/opt/bin:/usr/x86_64-pc-linux-gnu/gcc-bin/4.7.3:/usr/games/bin:$PATH"
 export LANG=en_CA.UTF-8
 
+##########
+# Python #
+##########
+
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    if command -v pyenv 1>/dev/null 2>&1; then
+        eval "$(pyenv init -)"
+    fi
+fi
+
 # Maven
 function mvn() {
     command mvn \
