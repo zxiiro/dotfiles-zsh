@@ -38,48 +38,6 @@ function mvn() {
 MAVEN_OPTS="-Xmx8g -XX:+TieredCompilation -XX:TieredStopAtLevel=1"
 echo "MAVEN_OPTS: $MAVEN_OPTS"
 
-# Install ZSH on remote ssh system
-function zshri() {
-    if [ -z "$1" ]; then
-        echo "Usage: zshri SSH_HOST"
-        exit 1
-    fi
-    # We want to wordsplit here on purpose
-    # shellcheck disable=2068
-    ssh -t -t $@ /bin/bash << SSHEOF
-cat << EOF > \$HOME/zshri.sh
-#!/bin/bash
-set -x
-if ! hash zsh; then
-    workdir=\$(mktemp -d --tmpdir="\$HOME" zshsrc-XXXX)
-
-    # Compile ZSH
-    git clone git://github.com/zsh-users/zsh.git "\$workdir"
-    cd "\$workdir" || exit 1
-    autoheader
-    autoconf
-    date > stamp-h.in
-    ./configure --prefix="\$HOME/.local" --enable-shared
-    make -j2
-    make install
-
-    rm -rf "\$workdir"
-
-    echo '[ -f \$HOME/.local/bin/zsh ] && exec \$HOME/.local/bin/zsh -l' > \$HOME/.bashrc
-fi
-
-git clone git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
-wget -nv -O ~/.zshrc https://raw.githubusercontent.com/zxiiro/dotfiles-zsh/master/.zshrc
-wget -nv -O ~/.oh-my-zsh/themes/zxiiro.zsh-theme https://raw.githubusercontent.com/zxiiro/dotfiles-zsh/master/.oh-my-zsh/themes/zxiiro.zsh-theme
-EOF
-
-chmod +x \$HOME/zshri.sh
-\$HOME/zshri.sh
-rm \$HOME/zshri.sh
-exit
-SSHEOF
-}
-
 if [ -f "${HOME}/.gnupg/gpg-agent-wrapper" ]; then
     # shellcheck disable=SC1090,SC1091
     source "${HOME}/.gnupg/gpg-agent-wrapper"
