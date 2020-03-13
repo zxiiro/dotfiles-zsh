@@ -55,6 +55,7 @@ if [ -f /usr/bin/virtualenvwrapper.sh ]; then
     source /usr/bin/virtualenvwrapper.sh
 fi
 
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 if [ -f /usr/share/fzf/key-bindings.zsh ]; then
     # shellcheck disable=SC1091
     source /usr/share/fzf/key-bindings.zsh
