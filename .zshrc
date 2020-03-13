@@ -63,3 +63,8 @@ fi
 
 # XDG
 export XDG_CONFIG_HOME="$HOME/.config"
+
+# jenv
+export PATH="$HOME/.jenv/bin:$PATH"
+eval "$(jenv init -)"
+
