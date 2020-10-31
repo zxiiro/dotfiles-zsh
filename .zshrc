@@ -1,7 +1,14 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 #shellcheck disable=SC2148
 # Path to your oh-my-zsh installation.
 export ZSH="${HOME}/.oh-my-zsh"
-ZSH_THEME="zxiiro"
+ZSH_THEME="powerlevel10k/powerlevel10k"
 HIST_STAMPS="yyyy-mm-dd"
 plugins=(battery git-prompt pip thefuck virtualenv)
 echo "zsh theme: $ZSH_THEME"
@@ -68,3 +75,5 @@ export XDG_CONFIG_HOME="$HOME/.config"
 export PATH="$HOME/.jenv/bin:$PATH"
 eval "$(jenv init -)"
 
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
