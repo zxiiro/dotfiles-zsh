@@ -71,9 +71,5 @@ fi
 # XDG
 export XDG_CONFIG_HOME="$HOME/.config"
 
-# jenv
-export PATH="$HOME/.jenv/bin:$PATH"
-eval "$(jenv init -)"
-
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
