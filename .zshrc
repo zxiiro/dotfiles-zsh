@@ -22,6 +22,14 @@ export PATH="$HOME/bin:$HOME/.local/bin:/usr/local/bin:/usr/bin:/bin:/opt/bin:/u
 export LANG=en_CA.UTF-8
 
 ##########
+# Docker #
+##########
+
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    export DOCKER_DEFAULT_PLATFORM=linux/amd64
+fi
+
+##########
 # Python #
 ##########
 
@@ -32,7 +40,10 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     fi
 fi
 
-# Maven
+#########
+# Maven #
+#########
+
 function mvn() {
     command mvn \
         --batch-mode \
