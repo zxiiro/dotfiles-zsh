@@ -10,7 +10,7 @@ fi
 export ZSH="${HOME}/.oh-my-zsh"
 ZSH_THEME="powerlevel10k/powerlevel10k"
 HIST_STAMPS="yyyy-mm-dd"
-plugins=(battery git-prompt pip thefuck virtualenv)
+plugins=(battery git-prompt pip virtualenv)
 echo "zsh theme: $ZSH_THEME"
 echo "zsh plugins: ${plugins[*]}"
 echo "zsh history datestamp: $HIST_STAMPS"
