@@ -21,6 +21,15 @@ source "$ZSH/oh-my-zsh.sh"
 export PATH="$HOME/bin:$HOME/.local/bin:/usr/local/bin:/usr/bin:/bin:/opt/bin:/usr/x86_64-pc-linux-gnu/gcc-bin/4.7.3:/usr/games/bin:$PATH"
 export LANG=en_CA.UTF-8
 
+############
+# Homebrew #
+############
+
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    alias ibrew='arch --x86_64 /usr/local/Homebrew/bin/brew'
+    PATH="/opt/homebrew/bin:$PATH"
+fi
+
 ##########
 # Docker #
 ##########
