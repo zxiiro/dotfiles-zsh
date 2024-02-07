@@ -1,10 +1,3 @@
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-
 #shellcheck disable=SC2148
 # Path to your oh-my-zsh installation.
 export ZSH="${HOME}/.oh-my-zsh"
@@ -14,6 +7,29 @@ plugins=(battery git-prompt pip virtualenv)
 echo "zsh theme: $ZSH_THEME"
 echo "zsh plugins: ${plugins[*]}"
 echo "zsh history datestamp: $HIST_STAMPS"
+
+#########
+# GNUPG #
+#########
+
+if [ -f "${HOME}/.gnupg/gpg-agent-wrapper" ]; then
+    # shellcheck disable=SC1090,SC1091
+    source "${HOME}/.gnupg/gpg-agent-wrapper"
+
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        export SSH_AUTH_SOCK="${HOME}/.gnupg/S.gpg-agent.ssh"
+    else
+        export SSH_AUTH_SOCK="/run/user/1000/gnupg/S.gpg-agent.ssh"
+    fi
+fi
+
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 # shellcheck disable=SC1090
 source "$ZSH/oh-my-zsh.sh"
 test -f .zshrc-lf && source .zshrc-lf
@@ -50,6 +66,12 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     fi
 fi
 
+if [ -f /usr/bin/virtualenvwrapper.sh ]; then
+    export WORKON_HOME=~/.virtualenvs
+    # shellcheck disable=SC1091
+    source /usr/bin/virtualenvwrapper.sh
+fi
+
 #########
 # Maven #
 #########
@@ -65,24 +87,10 @@ function mvn() {
     fi
 }
 MAVEN_OPTS="-Xmx8g -XX:+TieredCompilation -XX:TieredStopAtLevel=1"
-echo "MAVEN_OPTS: $MAVEN_OPTS"
 
-if [ -f "${HOME}/.gnupg/gpg-agent-wrapper" ]; then
-    # shellcheck disable=SC1090,SC1091
-    source "${HOME}/.gnupg/gpg-agent-wrapper"
-
-    if [[ "$OSTYPE" == "darwin"* ]]; then
-        export SSH_AUTH_SOCK="${HOME}/.gnupg/S.gpg-agent.ssh"
-    else
-        export SSH_AUTH_SOCK="/run/user/1000/gnupg/S.gpg-agent.ssh"
-    fi
-fi
-
-if [ -f /usr/bin/virtualenvwrapper.sh ]; then
-    export WORKON_HOME=~/.virtualenvs
-    # shellcheck disable=SC1091
-    source /usr/bin/virtualenvwrapper.sh
-fi
+###########
+# General #
+###########
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 if [ -f /usr/share/fzf/key-bindings.zsh ]; then
