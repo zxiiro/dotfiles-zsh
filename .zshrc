@@ -3,7 +3,16 @@
 export ZSH="${HOME}/.oh-my-zsh"
 ZSH_THEME="powerlevel10k/powerlevel10k"
 HIST_STAMPS="yyyy-mm-dd"
-plugins=(battery git-prompt pip virtualenv)
+plugins=(
+    battery
+    git-prompt
+    pip
+    virtualenv
+    zsh-autosuggestions
+    zsh-syntax-highlighting
+    fast-syntax-highlighting
+    zsh-autocomplete
+)
 echo "zsh theme: $ZSH_THEME"
 echo "zsh plugins: ${plugins[*]}"
 echo "zsh history datestamp: $HIST_STAMPS"
@@ -33,6 +42,7 @@ fi
 # shellcheck disable=SC1090
 source "$ZSH/oh-my-zsh.sh"
 test -f .zshrc-lf && source .zshrc-lf
+
 
 # User configuration
 export PATH="$HOME/bin:$HOME/.local/bin:/usr/local/bin:/usr/bin:/bin:/opt/bin:/usr/x86_64-pc-linux-gnu/gcc-bin/4.7.3:/usr/games/bin:$PATH"
