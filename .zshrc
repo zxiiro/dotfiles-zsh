@@ -8,6 +8,7 @@ plugins=(
     git-prompt
     pip
     virtualenv
+    zsh-autosuggestions
     zsh-syntax-highlighting
     fast-syntax-highlighting
 )
