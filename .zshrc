@@ -61,7 +61,7 @@ fi
 ##########
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
-    export DOCKER_DEFAULT_PLATFORM=linux/amd64
+    export DOCKER_DEFAULT_PLATFORM=linux/arm64
 fi
 
 ##########
